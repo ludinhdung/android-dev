@@ -26,6 +26,24 @@
     <ListView
         android:id="@+id/listViewTasks"
         android:layout_width="match_parent"
+        android:layout_height="418dp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/editTextUpdate"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="8dp"
+        android:hint="Update task"
+        android:inputType="text"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/buttonUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Update Task"
+        android:visibility="gone" />
+
 </LinearLayout>

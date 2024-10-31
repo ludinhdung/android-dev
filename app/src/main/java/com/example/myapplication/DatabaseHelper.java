@@ -65,11 +65,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return taskModels;
     }
 
-    public boolean deleteTask(TaskModel taskModel){
+    public boolean deleteTask(TaskModel taskModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "DELETE FROM task WHERE name = ?";
 
         Cursor cursor = db.rawQuery(query, new String[]{taskModel.getName()});
+
+        return cursor.moveToFirst();
+    }
+
+    public boolean updateTask(TaskModel taskModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "UPDATE task SET name = ? WHERE name = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{taskModel.getName(), taskModel.getName()});
 
         return cursor.moveToFirst();
     }
