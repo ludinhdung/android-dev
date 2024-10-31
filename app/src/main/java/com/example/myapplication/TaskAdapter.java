@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,10 @@ import java.util.List;
 
 public class TaskAdapter extends BaseAdapter {
 
-    Context context;
+    Activity context;
     List<TaskModel> taskModels;
-    LayoutInflater layoutInflater;
 
-    public TaskAdapter(Context context, List<TaskModel> taskModels) {
+    public TaskAdapter(Activity context, List<TaskModel> taskModels) {
         this.context = context;
         this.taskModels = taskModels;
     }
@@ -39,6 +39,8 @@ public class TaskAdapter extends BaseAdapter {
     @SuppressLint("ViewHolder")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        LayoutInflater layoutInflater = context.getLayoutInflater();
+
         view = layoutInflater.inflate(R.layout.activity_item_task, null);
 
         TextView textViewTaskName = view.findViewById(R.id.textViewTaskName);
