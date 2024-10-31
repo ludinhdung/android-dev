@@ -28,6 +28,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS task");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS user");
+        onCreate(sqLiteDatabase);
     }
 
     public boolean addTask(String name) {
@@ -48,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
                 String name = cursor.getString(0);
                 TaskModel taskModel = new TaskModel(name);

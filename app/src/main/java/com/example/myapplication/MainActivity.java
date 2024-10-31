@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,9 +15,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextTask;
-    private Button buttonAdd;
     private ListView listViewTasks;
-    private DatabaseHelper databaseHelper = new DatabaseHelper(this);
+
+    private final DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,16 +25,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editTextTask = findViewById(R.id.editTextTask);
-        buttonAdd = findViewById(R.id.buttonAdd);
+        Button buttonAdd = findViewById(R.id.buttonAdd);
         listViewTasks = findViewById(R.id.listViewTasks);
 
         showListTask();
 
         buttonAdd.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(editTextTask.getText().toString())) return;
+
             TaskModel taskModel = new TaskModel(editTextTask.getText().toString());
 
-            if (databaseHelper.addTask(taskModel.getName())) {
-                Toast.makeText(this, taskModel.toString(), Toast.LENGTH_SHORT).show();
+            boolean addTask = databaseHelper.addTask(taskModel.getName());
+
+            if (addTask) {
+                showListTask();
+                editTextTask.setText("");
+                editTextTask.requestFocus();
+                Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
             }
