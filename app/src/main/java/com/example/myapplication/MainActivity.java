@@ -47,11 +47,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        listViewTasks.setOnItemClickListener((adapterView, view, i, l) -> {
+            Toast.makeText(this, adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show();
+        });
     }
+
 
     private void showListTask() {
         List<TaskModel> taskModels = databaseHelper.getTasks();
-        ArrayAdapter<TaskModel> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, taskModels);
+        TaskAdapter adapter = new TaskAdapter(this, taskModels);
         listViewTasks.setAdapter(adapter);
     }
 
