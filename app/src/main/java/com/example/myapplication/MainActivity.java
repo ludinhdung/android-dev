@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskAdapter.TaskActionListener {
 
     private EditText editTextTask, editTextUpdate;
     private ListView listViewTasks;
@@ -40,19 +40,6 @@ public class MainActivity extends AppCompatActivity {
             if (selectedTask != null) {
                 updateTask();
             }
-        });
-
-        listViewTasks.setOnItemClickListener((adapterView, view, position, id) -> {
-            TaskModel taskModel = (TaskModel) adapterView.getItemAtPosition(position);
-            selectedTask = taskModel;
-
-            editTextUpdate.setText(taskModel.getName());
-
-            editTextUpdate.setVisibility(View.VISIBLE);
-            buttonUpdate.setVisibility(View.VISIBLE);
-
-            Button deleteButton = view.findViewById(R.id.buttonDelete);
-            deleteButton.setOnClickListener(v -> deleteTask(taskModel));
         });
     }
 
@@ -91,20 +78,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void deleteTask(TaskModel taskModel) {
-        boolean deleteSuccess = databaseHelper.deleteTask(taskModel);
+    private void setAdapter() {
+        List<TaskModel> taskModels = databaseHelper.getTasks();
+        adapter = new TaskAdapter(this, taskModels, this);
+        listViewTasks.setAdapter(adapter);
+    }
 
+    @Override
+    public void onDeleteTask(TaskModel task) {
+        boolean deleteSuccess = databaseHelper.deleteTask(task);
         if (deleteSuccess) {
+            setAdapter(); // Refresh list
             Toast.makeText(this, "Task deleted successfully", Toast.LENGTH_SHORT).show();
-            setAdapter();
         } else {
             Toast.makeText(this, "Failed to delete task", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void setAdapter() {
-        List<TaskModel> taskModels = databaseHelper.getTasks();
-        adapter = new TaskAdapter(this, taskModels);
-        listViewTasks.setAdapter(adapter);
+    @Override
+    public void onUpdateTask(TaskModel task) {
+        selectedTask = task;
+        editTextUpdate.setText(task.getName());
+        editTextUpdate.setVisibility(View.VISIBLE);
+        findViewById(R.id.buttonUpdate).setVisibility(View.VISIBLE);
     }
 }
