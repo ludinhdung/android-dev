@@ -14,7 +14,7 @@
 
     <!-- Button Update -->
     <Button
-        android:id="@+id/buttonUpdate"
+        android:id="@+id/buttonUpdateItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"

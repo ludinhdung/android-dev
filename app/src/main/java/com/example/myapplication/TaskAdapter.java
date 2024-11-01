@@ -48,7 +48,7 @@ public class TaskAdapter extends BaseAdapter {
         textViewTaskName.setText(task.getName());
 
         Button deleteButton = view.findViewById(R.id.buttonDelete);
-        Button updateButton = view.findViewById(R.id.buttonUpdate);
+        Button updateButton = view.findViewById(R.id.buttonUpdateItem);
 
         deleteButton.setOnClickListener(v -> {
             if (taskActionListener != null) {

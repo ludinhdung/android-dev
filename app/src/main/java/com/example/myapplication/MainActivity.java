@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.TaskA
     public void onDeleteTask(TaskModel task) {
         boolean deleteSuccess = databaseHelper.deleteTask(task);
         if (deleteSuccess) {
-            setAdapter(); // Refresh list
+            setAdapter();
             Toast.makeText(this, "Task deleted successfully", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Failed to delete task", Toast.LENGTH_SHORT).show();
