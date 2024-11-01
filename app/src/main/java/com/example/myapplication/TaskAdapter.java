@@ -45,7 +45,7 @@ public class TaskAdapter extends BaseAdapter {
 
         TaskModel task = taskModels.get(i);
         TextView textViewTaskName = view.findViewById(R.id.textViewTaskName);
-        textViewTaskName.setText(task.getName());
+        textViewTaskName.setText("ID: " + task.getId() + " - " + task.getName());
 
         Button deleteButton = view.findViewById(R.id.buttonDelete);
         Button updateButton = view.findViewById(R.id.buttonUpdateItem);
@@ -53,9 +53,8 @@ public class TaskAdapter extends BaseAdapter {
         deleteButton.setOnClickListener(v -> {
             if (taskActionListener != null) {
                 taskActionListener.onDeleteTask(task);
-                taskModels.remove(i);  // Remove item from list
-                notifyDataSetChanged();  // Refresh adapter
-                Toast.makeText(context, "Task deleted", Toast.LENGTH_SHORT).show();
+                taskModels.remove(i);
+                notifyDataSetChanged();
             }
         });
 
@@ -67,6 +66,7 @@ public class TaskAdapter extends BaseAdapter {
 
         return view;
     }
+
 
     public interface TaskActionListener {
         void onDeleteTask(TaskModel task);

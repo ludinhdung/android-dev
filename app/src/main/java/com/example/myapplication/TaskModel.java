@@ -3,10 +3,20 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 
 public class TaskModel {
+    private int id;  // New ID field
     private String name;
 
-    public TaskModel(String name) {
+    public TaskModel(int id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -20,6 +30,6 @@ public class TaskModel {
     @NonNull
     @Override
     public String toString() {
-        return "Name: " + name;
+        return "ID: " + id + ", Name: " + name;
     }
 }

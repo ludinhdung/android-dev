@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String tasks = "CREATE TABLE task(name TEXT)";
+        String tasks = "CREATE TABLE task(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)";
         String users = "CREATE TABLE user(name TEXT, password TEXT)";
 
         sqLiteDatabase.execSQL(tasks);
@@ -36,50 +36,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean addTask(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-
         contentValues.put("name", name);
 
-        return db.insert("task", null, contentValues) != -1;
+        long result = db.insert("task", null, contentValues);
+        db.close();
+        return result != -1;
     }
 
     public List<TaskModel> getTasks() {
         List<TaskModel> taskModels = new ArrayList<>();
-
-        String query = "SELECT * FROM task";
-
         SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery("SELECT id, name FROM task", null);
 
         if (cursor.moveToFirst()) {
             do {
-                String name = cursor.getString(0);
-                TaskModel taskModel = new TaskModel(name);
-                taskModels.add(taskModel);
+                int id = cursor.getInt(0);
+                String name = cursor.getString(1);
+                taskModels.add(new TaskModel(id, name));
             } while (cursor.moveToNext());
         }
 
         cursor.close();
         db.close();
-
         return taskModels;
     }
-
     public boolean deleteTask(TaskModel taskModel) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM task WHERE name = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{taskModel.getName()});
-
-        return cursor.moveToFirst();
+        int rows = db.delete("task", "id = ?", new String[]{String.valueOf(taskModel.getId())});
+        db.close();
+        return rows > 0;
     }
 
     public boolean updateTask(TaskModel taskModel) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "UPDATE task SET name = ? WHERE name = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{taskModel.getName(), taskModel.getName()});
-
-        return cursor.moveToFirst();
+        ContentValues values = new ContentValues();
+        values.put("name", taskModel.getName());
+        int rows = db.update("task", values, "id = ?", new String[]{String.valueOf(taskModel.getId())});
+        db.close();
+        return rows > 0;
     }
 }

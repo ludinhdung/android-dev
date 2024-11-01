@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.TaskA
         String taskName = editTextTask.getText().toString().trim();
         if (TextUtils.isEmpty(taskName)) return;
 
-        TaskModel taskModel = new TaskModel(taskName);
-        boolean addTask = databaseHelper.addTask(taskModel.getName());
+        boolean addTask = databaseHelper.addTask(taskName);
 
         if (addTask) {
             adapter.notifyDataSetChanged();
@@ -100,6 +99,5 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.TaskA
         selectedTask = task;
         editTextUpdate.setText(task.getName());
         editTextUpdate.setVisibility(View.VISIBLE);
-        findViewById(R.id.buttonUpdate).setVisibility(View.VISIBLE);
     }
 }
