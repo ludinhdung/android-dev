@@ -20,10 +20,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String tasks = "CREATE TABLE task(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)";
-        String users = "CREATE TABLE user(name TEXT, password TEXT)";
+        String users = "CREATE TABLE user(username TEXT PRIMARY KEY, password TEXT)";
 
         sqLiteDatabase.execSQL(tasks);
         sqLiteDatabase.execSQL(users);
+
+        sqLiteDatabase.execSQL("INSERT INTO user (username, password) VALUES ('user1', 'password1')");
+        sqLiteDatabase.execSQL("INSERT INTO user (username, password) VALUES ('user2', 'password2')");
+        sqLiteDatabase.execSQL("INSERT INTO user (username, password) VALUES ('admin', 'adminpass')");
     }
 
     @Override
@@ -31,6 +35,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS task");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS user");
         onCreate(sqLiteDatabase);
+    }
+
+    public boolean addUser(String username, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("username", username);
+        contentValues.put("password", password);
+
+        long result = db.insert("user", null, contentValues);
+        db.close();
+        return result != -1;
+    }
+
+    public boolean checkUser(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM user WHERE username = ? AND password = ?",
+                new String[]{username, password});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        db.close();
+        return exists;
     }
 
     public boolean addTask(String name) {
@@ -60,6 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return taskModels;
     }
+
     public boolean deleteTask(TaskModel taskModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         int rows = db.delete("task", "id = ?", new String[]{String.valueOf(taskModel.getId())});

@@ -99,5 +99,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.TaskA
         selectedTask = task;
         editTextUpdate.setText(task.getName());
         editTextUpdate.setVisibility(View.VISIBLE);
+        findViewById(R.id.buttonUpdate).setVisibility(View.VISIBLE);
     }
 }
